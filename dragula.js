@@ -378,6 +378,9 @@ function dragula (initialContainers, options) {
       over();
     }
     var parent = getParent(item);
+
+    drake.emit('mousemove', e, item, parent, y, x);
+
     if (dropTarget === _source && _copy && !o.copySortSource) {
       if (parent) {
         parent.removeChild(item);
