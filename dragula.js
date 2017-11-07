@@ -516,8 +516,9 @@ function touchy (el, op, type, fn) {
   } else if (global.navigator.msPointerEnabled) {
     crossvent[op](el, microsoft[type], fn);
   } else {
-    crossvent[op](el, touch[type], fn);
-    crossvent[op](el, type, fn);
+    // https://github.com/bevacqua/dragula/pull/471/files
+    crossvent[op](el, touch[type], fn, { passive: false });
+    crossvent[op](el, type, fn, { passive: false });
   }
 }
 
