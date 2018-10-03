@@ -40,6 +40,9 @@ function dragula (initialContainers, options) {
   if (o.ignoreInputTextSelection === void 0) { o.ignoreInputTextSelection = true; }
   if (o.mirrorContainer === void 0) { o.mirrorContainer = doc.body; }
 
+  if (o.beforeDrop === void 0) { o.beforeDrop = false; }
+  if (o.mirrorScaleValue === void 0) { o.mirrorScaleValue = 1; }
+
   var drake = emitter({
     containers: o.containers,
     start: manualStart,
@@ -258,7 +261,12 @@ function dragula (initialContainers, options) {
     if (isInitialPlacement(target)) {
       drake.emit('cancel', item, _source, _source);
     } else {
-      drake.emit('drop', item, target, _source, _currentSibling);
+      if (o.beforeDrop && !o.beforeDrop(item, target, _source, _currentSibling)) {
+        cancel();
+      }
+      else {
+        drake.emit('drop', item, target, _source, _currentSibling);
+      }
     }
     cleanup();
   }
@@ -365,8 +373,7 @@ function dragula (initialContainers, options) {
     var x = clientX - _offsetX;
     var y = clientY - _offsetY;
 
-    _mirror.style.left = x + 'px';
-    _mirror.style.top = y + 'px';
+    _mirror.style.transform = 'scale(' + o.mirrorScaleValue + ') translate(' + x + 'px,' + y + 'px)';
 
     var item = _copy || _item;
     var elementBehindCursor = getElementBehindPoint(_mirror, clientX, clientY);
@@ -378,6 +385,9 @@ function dragula (initialContainers, options) {
       over();
     }
     var parent = getParent(item);
+
+    drake.emit('mousemove', e, item, parent, y, x);
+
     if (dropTarget === _source && _copy && !o.copySortSource) {
       if (parent) {
         parent.removeChild(item);
