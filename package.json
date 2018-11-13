@@ -18,10 +18,7 @@
     "test": "npm run lint && browserify test/*.js | tape-run",
     "test-watch": "hihat test/*.js -p tap-dev-tool"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bevacqua/dragula.git"
-  },
+  "repository": "git@github.com/mindojo/mindojo-dragula.git",
   "author": "Nicolas Bevacqua <nicolasbevacqua@gmail.com> (http://bevacqua.io/)",
   "license": "MIT",
   "bugs": {
